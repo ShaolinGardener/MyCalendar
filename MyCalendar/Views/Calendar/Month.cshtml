@@ -1,0 +1,235 @@
+﻿@model IEnumerable<MyCalendar.Models.Event>
+
+@{
+    var monthName = MyCalendar.Models.Month.Names[int.Parse(ViewBag.Month.ToString()) - 1] + " " + ViewBag.Year.ToString();
+    ViewBag.Title = "Monthly - " + monthName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DateTime month = DateTime.Parse(ViewBag.Month.ToString() + "/1/" + ViewBag.Year.ToString());
+    DateTime previousMonth = month.AddMonths(-1);
+    DateTime nextMonth = month.AddMonths(1);
+    var previousMonthString = MyCalendar.Models.Month.Names[previousMonth.Month - 1] + " " + previousMonth.Year.ToString();
+    var nextMonthString = @MyCalendar.Models.Month.Names[nextMonth.Month - 1] + " " + nextMonth.Year.ToString();
+
+}
+<style>
+    .cal {
+        background-color: #afc9dc /*#e9f0f5*/
+    }
+
+    .left {
+        border-style: solid;
+        border-color: black;
+        border-width: 1px 1px 1px 1px;
+    }
+
+    .right {
+        border-style: solid;
+        border-color: black;
+        border-width: 1px 1px 1px 0px;
+    }
+
+    .number {
+        border-style: solid;
+        border-color: black;
+        border-width: 0px 1px 1px 0px;
+    }
+
+    .left-number {
+        border-style: solid;
+        border-color: black;
+        border-width: 0px 1px 1px 1px;
+    }
+
+    .left-bottom {
+        border-style: solid;
+        border-color: black;
+        border-width: 0px 1px 1px 1px;
+    }
+
+    .right-bottom {
+        border-style: solid;
+        border-color: black;
+        border-width: 0px 1px 1px 0px;
+    }
+
+    .blank-right {
+        border-style: solid;
+        border-color: black;
+        border-width: 0px 1px 0px 0px;
+    }
+
+    .hidden {
+        display: none
+    }
+
+    .dayOfWeek {
+        background-color: #5f81b7;
+        color: aliceblue;
+        text-align: center
+    }
+
+    .currentDay {
+        background-color: #ead0ba /*#ccc*/
+    }
+
+    .col .col-2 .col-3 .col-9 .col-10 .col-12 {
+        padding: 0px 0px 0px 0px
+    }
+
+    .other-month {
+        background-color: #f6f5fe
+    }
+</style>
+<div class="container-fluid">
+    <div class="row" style="vertical-align:bottom">
+        <div class="col-4" style="text-align:left;color:#999;font-variant:small-caps;vertical-align:bottom"><h4 id="prevMonth">&lt;&lt;@previousMonthString</h4></div>
+        <div class="col-4" style="text-align:center;font-variant:small-caps;vertical-align:bottom"><h2>@monthName</h2></div>
+        <div class="col-4" style="text-align:right;color:#999;font-variant:small-caps;vertical-align:bottom"><h4 id="nextMonth">@nextMonthString&gt;&gt;</h4></div>
+    </div>
+</div>
+
+@{
+    DateTime calendarStart;
+    if ((int)month.DayOfWeek == 0)
+    {
+        calendarStart = month;
+    }
+    else
+    {
+        calendarStart = month.AddDays(-1);
+        while ((int)calendarStart.DayOfWeek != 0)
+        {
+            calendarStart = calendarStart.AddDays(-1);
+        }
+    }
+
+    DayOfWeek day = month.DayOfWeek;
+    var firstPass = true;
+    var dateCount = 0; string dateCountString = "<br/>";
+    DateTime currentDateCount = DateTime.Parse(ViewBag.Month.ToString() + "/1/" + ViewBag.Year.ToString());
+    DateTime currentDate = DateTime.Now;
+    var lastDay = month.AddMonths(1).AddDays(-1);
+    var m = (List<MyCalendar.Models.Event>)Model;
+    bool lastDayPassed = false;
+
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col dayOfWeek center left">Sunday</div>
+        <div class="col dayOfWeek center right">Monday</div>
+        <div class="col dayOfWeek center right">Tuesday</div>
+        <div class="col dayOfWeek center right">Wednesday</div>
+        <div class="col dayOfWeek center right">Thursday</div>
+        <div class="col dayOfWeek center right">Friday</div>
+        <div class="col dayOfWeek center right">Saturday</div>
+    </div>
+
+    @{
+        var currentStyle = "left-bottom";
+        var currentStyleBlank = "blank-right";
+        var numberStyle = "";
+        List<MyCalendar.Models.Event> events = new List<MyCalendar.Models.Event>();
+        currentDateCount = calendarStart.AddDays(-1);
+    }
+
+    @for (int i = 0; i < 6; i++)
+    {
+        if (!lastDayPassed)
+        {
+            @Html.Raw(@"<div class=""row"">")
+            for (int j = 0; j < 7; j++)
+            {
+                currentDateCount = currentDateCount.AddDays(1);
+                dateCount++;
+
+                if (j == 0)
+                {
+                    currentStyle = "left-bottom";
+                    numberStyle = "left-number";
+                }
+                else
+                {
+                    currentStyle = "right-bottom";
+                    numberStyle = "number";
+                }
+                currentStyleBlank = "blank-right";
+
+
+                if ((dateCount != 0) && (currentDateCount <= lastDay))
+                {
+                    //currentDateCount = currentDateCount.AddDays(1);
+                    events = m.Where(x => x.Start.ToShortDateString() == currentDateCount.ToShortDateString()).ToList<MyCalendar.Models.Event>();
+
+                    //if (!firstPass) { dateCount++; }
+                }
+
+
+
+
+                if (currentDateCount >= lastDay)
+                {
+                    lastDayPassed = true;
+                }
+                if (currentDateCount.ToShortDateString() == DateTime.Now.ToShortDateString())
+                {
+                    currentStyle += " currentDay";
+                    currentStyleBlank += " currentDay";
+                    numberStyle += " currentDay";
+                }
+                else if (currentDateCount.Month != month.Month)
+                {
+                    currentStyle += " other-month";
+                    currentStyleBlank += " other-month";
+                    numberStyle += " other-month";
+                }
+                else
+                {
+                    currentStyle = currentStyle.Replace(" other-month", "");
+                    currentStyleBlank=currentStyleBlank.Replace(" other-month", "");
+                    numberStyle =numberStyle.Replace(" other-month", "");
+                }
+
+
+                <div class="col">
+                    <div class="row">
+                        <div class="col-3 cal @numberStyle" style="text-align:right">@currentDateCount.Day.ToString()</div>
+                        <div class="col-9 cal @currentStyleBlank"></div>
+                    </div>
+                    <div class="row" style="min-height:100px">
+                        <div class="col-12 cal @currentStyle" id="@currentDateCount.Month.ToString()-@currentDateCount.Day.ToString()" data-date="@currentDateCount.ToShortDateString()">
+                            @foreach (var e in events)
+                            {
+                                <div class="event" style="background-color:blanchedalmond;color:red" data-date="@e.Name@e.Start.ToShortDateString()">@e.Name</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+
+            }
+            firstPass = false;
+            @Html.Raw(@"</div>")
+        }
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        $("#prevMonth").click(function () {
+            window.location.href = "/Calendar/Month/?month=@previousMonth.Month.ToString()&year=@previousMonth.Year.ToString()";
+        }).mouseover(function () {
+            $(this).css('cursor', 'pointer')
+        });
+
+        $("#nextMonth").click(function () {
+            window.location.href = "/Calendar/Month/?month=@nextMonth.Month.ToString()&year=@nextMonth.Year.ToString()";
+        }).mouseover(function () {
+            $(this).css('cursor', 'pointer')
+            });
+        $('.cal,.event').each(function () {
+            $(this).click(function () {
+                alert($(this).data("date"));
+            });
+        });
+
+    });
+</script>
