@@ -103,8 +103,7 @@
     }
 
     DayOfWeek day = month.DayOfWeek;
-    var firstPass = true;
-    var dateCount = 0; string dateCountString = "<br/>";
+    var dateCount = 0;
     DateTime currentDateCount = DateTime.Parse(ViewBag.Month.ToString() + "/1/" + ViewBag.Year.ToString());
     DateTime currentDate = DateTime.Now;
     var lastDay = month.AddMonths(1).AddDays(-1);
@@ -153,18 +152,11 @@
                 }
                 currentStyleBlank = "blank-right";
 
-
                 if ((dateCount != 0) && (currentDateCount <= lastDay))
                 {
-                    //currentDateCount = currentDateCount.AddDays(1);
                     events = m.Where(x => x.Start.ToShortDateString() == currentDateCount.ToShortDateString()).ToList<MyCalendar.Models.Event>();
-
-                    //if (!firstPass) { dateCount++; }
                 }
-
-
-
-
+                                             
                 if (currentDateCount >= lastDay)
                 {
                     lastDayPassed = true;
@@ -188,23 +180,20 @@
                     numberStyle =numberStyle.Replace(" other-month", "");
                 }
 
-
                 <div class="col">
                     <div class="row">
                         <div class="col-3 cal @numberStyle" style="text-align:right">@currentDateCount.Day.ToString()</div>
                         <div class="col-9 cal @currentStyleBlank"></div>
                     </div>
                     <div class="row" style="min-height:100px">
-                        <div class="col-12 cal @currentStyle" id="@currentDateCount.Month.ToString()-@currentDateCount.Day.ToString()" data-date="@currentDateCount.ToShortDateString()">
+                        <div class="col-12 cal @currentStyle" id="@currentDateCount.Month.ToString()-@currentDateCount.Day.ToString()" data-date="@currentDateCount.ToShortDateString()" style="text-align:center">
                             @foreach (var e in events)
                             {
-                                <div class="event" style="background-color:blanchedalmond;color:red" data-date="@e.Name@e.Start.ToShortDateString()">@e.Name</div>
+                                <a href="#" class="badge event" style="background-color:blanchedalmond;color:red" data-date="@e.Name@e.Start.ToShortDateString()">@e.Name</a><br />
                             }
                         </div>
                     </div>
                 </div>
-
-
             }
             firstPass = false;
             @Html.Raw(@"</div>")
@@ -229,6 +218,5 @@
                 alert($(this).data("date"));
             });
         });
-
     });
 </script>
