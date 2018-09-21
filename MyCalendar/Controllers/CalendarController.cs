@@ -106,5 +106,24 @@ namespace MyCalendar.Controllers
 
             return View(events);
         }
+
+        [HttpGet]
+        public ActionResult CalendarContainer(int month, int year)
+        {
+            ViewBag.Month = month;
+            ViewBag.Year = year;
+            //List<Event> events = new List<Event>
+            //{
+            //    new Event()
+            //    {
+            //        Name = "First One",
+            //        Start = DateTime.Parse("10/11/2018 09:00"),
+            //        End = DateTime.Parse("10/11/2018 10:00"),
+            //        Class = null,
+            //        Instructor = null,
+            //    }
+            //};
+            return View();
+        }
     }
 }

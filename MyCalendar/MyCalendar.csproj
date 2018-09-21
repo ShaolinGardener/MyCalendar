@@ -345,6 +345,7 @@
     <Content Include="Views\Calendar\Month.cshtml" />
     <Content Include="Views\Calendar\Week.cshtml" />
     <Content Include="Views\Calendar\Day.cshtml" />
+    <Content Include="Views\Calendar\CalendarContainer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

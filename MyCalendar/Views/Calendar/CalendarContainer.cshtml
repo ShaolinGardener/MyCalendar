@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "CalendarContainer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>_CalendarContainer</h2>*@
+<ul class="nav nav-tabs">
+    <li class="nav-item"><a href="#" class="nav-link" id="tabMonth">Month</a></li>
+    <li class="nav-item"><a href="#" class="nav-link" id="tabWeek">Week</a></li>
+    <li class="nav-item"><a href="#" class="nav-link" id="tabDay">Day</a></li>
+</ul>
+<div>
+    <iframe id="monthFrame" style="width:100%;height:1000px;border:none" src="/Calendar/Month/?month=10&year=2018"></iframe>
+    <iframe id="weekFrame" style="width:100%;height:1000px;border:none;display:none" src="/Calendar/Month/?month=11&year=2018"></iframe> 
+    <iframe id="dayFrame" style="width:100%;height:1000px;border:none;display:none" src="/Calendar/Month/?month=12&year=2018"></iframe>
+</div>
+<script>
+    var tabMonth, tabDay, tabWeek, frameMonth, frameDay, frameWeek;
+    $(document).ready(function () {
+        tabMonth = $('#tabMonth');
+        tabMonth.addClass('active');
+        tabDay = $('#tabDay');
+        tabWeek = $('#tabWeek');
+        frameDay = $('#dayFrame');
+        frameMonth = $('#monthFrame');
+        frameWeek = $('#weekFrame');
+
+        tabMonth.click(function () {
+            //debugger;
+            if (!tabMonth.hasClass('active')) {
+                if (frameDay.is(':visible')) {
+                    frameDay.fadeOut(1000);
+                    tabMonth.removeClass('active');
+                }
+                if (frameWeek.is(':visible')) {
+                    frameWeek.fadeOut(1000);
+                }
+                tabMonth.removeClass('active');
+                tabWeek.removeClass('active');
+                frameMonth.fadeIn(2000);
+                tabMonth.addClass('active');
+            }
+        });
+
+        tabDay.click(function () {
+            //debugger;
+            if (!tabDay.hasClass('active')) {
+                if (frameMonth.is(':visible')) {
+                    frameMonth.fadeOut(1000);                    
+                }
+                if (frameWeek.is(':visible')) {
+                    frameWeek.fadeOut(1000);                    
+                }
+                tabWeek.removeClass('active');
+                tabMonth.removeClass('active');
+                frameDay.fadeIn(2000);
+                tabDay.addClass('active');
+            }
+        });
+
+        tabWeek.click(function () {
+            //debugger;
+            if (!tabWeek.hasClass('active')) {
+                if (frameDay.is(':visible')) {
+                    frameDay.fadeOut(1000);
+                    tabDay.removeClass('active');
+                }
+                if (frameMonth.is(':visible')) {
+                    frameMonth.fadeOut(1000);
+                }
+                tabMonth.removeClass('active');
+                tabDay.removeClass('active');
+                frameWeek.fadeIn(2000);
+                tabWeek.addClass('active');
+            }
+        });
+    });
+</script>

@@ -3,7 +3,6 @@
 @{
     var monthName = MyCalendar.Models.Month.Names[int.Parse(ViewBag.Month.ToString()) - 1] + " " + ViewBag.Year.ToString();
     ViewBag.Title = "Monthly - " + monthName;
-    Layout = "~/Views/Shared/_Layout.cshtml";
     DateTime month = DateTime.Parse(ViewBag.Month.ToString() + "/1/" + ViewBag.Year.ToString());
     DateTime previousMonth = month.AddMonths(-1);
     DateTime nextMonth = month.AddMonths(1);
