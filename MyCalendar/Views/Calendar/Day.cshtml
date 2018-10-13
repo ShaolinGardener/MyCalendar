@@ -7,8 +7,12 @@
     DateTime previousDay = currentDate.AddDays(-1);
     DateTime nextDay = currentDate.AddMonths(1);
 }
-<style>
-</style>
+<link rel="stylesheet" href="~/Content/Site.css" />
+<link rel="stylesheet" href="~/Content/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+<div class="container-fluid">
+    <input type="button" value="Today" onclick="window.location.href = '/Calendar/Day/'" />
+</div>
+
 <div class="container-fluid">
     <div class="row" style="vertical-align:bottom">
         <div class="col-4" style="text-align:left;color:#999;font-variant:small-caps;vertical-align:bottom"><h4 id="prevMonth">&lt;&lt;Previous</h4></div>
