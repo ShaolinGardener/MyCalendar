@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "CalendarContainer";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var week = DateTime.Now;
 }
 
 @*<h2>_CalendarContainer</h2>*@
@@ -12,8 +13,8 @@
 </ul>
 <div>
     <iframe id="monthFrame" style="width:100%;height:1000px;border:none" src="/Calendar/Month/?month=10&year=2018"></iframe>
-    <iframe id="weekFrame" style="width:100%;height:1000px;border:none;display:none" src="/Calendar/Month/?month=11&year=2018"></iframe> 
-    <iframe id="dayFrame" style="width:100%;height:1000px;border:none;display:none" src="/Calendar/Month/?month=12&year=2018"></iframe>
+    <iframe id="weekFrame" style="width:100%;height:1000px;border:none;display:none" src="/Calendar/Week/?week=@week"></iframe> 
+    <iframe id="dayFrame" style="width:100%;height:1000px;border:none;display:none" src="/Calendar/Day/?day=@week"></iframe>
 </div>
 <script>
     var tabMonth, tabDay, tabWeek, frameMonth, frameDay, frameWeek;

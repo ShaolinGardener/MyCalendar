@@ -88,10 +88,16 @@ namespace MyCalendar.Controllers
         }
 
         [HttpGet]
-        public ActionResult Month(int month, int year)
+        public ActionResult Month(string month, string year)
         {
-            ViewBag.Month = month;
-            ViewBag.Year = year;
+            if(month==null || year == null)
+            {
+                var currentDay = DateTime.Now;
+                month = currentDay.Month.ToString();
+                year = currentDay.Year.ToString();
+            }
+            ViewBag.Month = int.Parse(month);
+            ViewBag.Year = int.Parse(year);
             List<Event> events = new List<Event>
             {
                 new Event()
@@ -108,10 +114,39 @@ namespace MyCalendar.Controllers
         }
 
         [HttpGet]
-        public ActionResult CalendarContainer(int month, int year)
+        public ActionResult Week(string week)
         {
-            ViewBag.Month = month;
-            ViewBag.Year = year;
+            if (string.IsNullOrEmpty(week))
+                week = DateTime.Now.ToShortDateString();
+
+            DateTime currentDate = DateTime.Parse(week);
+            ViewBag.CurrentDate = currentDate;
+            List<Event> events = new List<Event>
+            {
+                new Event()
+                {
+                    Name = "First One",
+                    Start = DateTime.Parse("10/11/2018 09:00"),
+                    End = DateTime.Parse("10/11/2018 10:00"),
+                    Class = null,
+                    Instructor = null,
+                }
+            };
+
+            return View(events);
+        }
+        [HttpGet]
+        public ActionResult CalendarContainer(string month, string year)
+        {
+            if (month == null || year == null)
+            {
+                var currentDay = DateTime.Now;
+                month = currentDay.Month.ToString();
+                year = currentDay.Year.ToString();
+            }
+            ViewBag.Month = int.Parse(month);
+            ViewBag.Year = int.Parse(year);
+
             //List<Event> events = new List<Event>
             //{
             //    new Event()
